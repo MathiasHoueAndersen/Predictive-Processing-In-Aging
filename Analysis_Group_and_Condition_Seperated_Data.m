@@ -304,6 +304,7 @@ networkFiles = {
 };
 
 % Choose an atlas in MNI space (NIfTI) + a label lookup (CSV/TXT).
+% The AAL Atlas (version 3.1) can be downloaded here: https://www.oxcns.org/aal3.html
 atlasNiftiPath  = '/main_path/AAL3/AAL3v1.nii';
 atlasLabelsPath = '/main_path/AAL3/AAL3v1.nii.txt';
 
