@@ -3473,7 +3473,7 @@ DATA = dum;
 
 % Remove first participant and define time vector
 
-% OPTION 2: 52 ms baseline
+% 100 ms baseline
 time = -0.100:0.004:0.8;
 DATA = DATA(:,101:326,:,2:78);
 
