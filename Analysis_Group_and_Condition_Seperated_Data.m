@@ -308,8 +308,6 @@ networkFiles = {
 atlasNiftiPath  = '/main_path/AAL3/AAL3v1.nii';
 atlasLabelsPath = '/main_path/AAL3/AAL3v1.nii.txt';
 
-% If you KNOW your contribution column name, set it here (recommended).
-% Otherwise leave as "" to let the script guess.
 contributionColumnOverride = "";  % e.g., "Contribution", "Weight", "Loading", "Beta", "Z", etc.
 
 % What to do with atlas voxels that map to 0 / background / unknown
@@ -2092,10 +2090,11 @@ end
 % Please check the BROADNESS GitHub repository for new releases.  
 % https://github.com/leonardob92/BROADNESS_MEG_AuditoryRecognition/tree/main/BROADNESS_Toolbox
 % Feel free to reach out to us if you need guidance or consultation.  
-% Leonardo Bonetti: leonardo.bonetti@clin.au.dk
-%                   leonardo.bonetti@psych.ox.ac.uk
-% Mattia Rosso:     mattia.rosso@clin.au.dk
-% Chiara Malvaso:   chiara.malvaso@studio.unibo.it
+% Leonardo Bonetti:         leonardo.bonetti@clin.au.dk
+%                           leonardo.bonetti@psych.ox.ac.uk
+% Mattia Rosso:             mattia.rosso@clin.au.dk
+% Chiara Malvaso:           chiara.malvaso@studio.unibo.it
+% Mathias Houe Andersen:    mathiasha@drcmr.dk  
 %
 %  Please cite the first BROADNESS paper if using the BROADNESS toolbox:
 %  Bonetti, L., Fernandez-Rubio, G., Andersen, M. H., Malvaso, C., Carlomagno,
