@@ -36,7 +36,7 @@
 %  time series for each participant for statistical analysis.
 %  The spatial activation patterns of the networks is instead provided for
 %  the group level.
-%  Note that if you wish to only have a quick computation on the data averaged across
+%  Note that if you wish to only have a quick computation of the data averaged across
 %  participants, you can use the data averaged across participants available
 %  in "MMNSubtracted_Average_SignFixed.mat".
 %
@@ -445,7 +445,6 @@ networkFiles = {
 atlasNiftiPath  = '/main_path/AAL3/AAL3v1.nii';
 atlasLabelsPath = '/main_path/AAL3/AAL3v1.nii.txt';
 
-% If you KNOW your contribution column name, set it here (recommended).
 % Otherwise leave as "" to let the script guess.
 contributionColumnOverride = "";  % e.g., "Contribution", "Weight", "Loading", "Beta", "Z", etc.
 
@@ -3151,8 +3150,8 @@ for f = 1:numel(files)
 
     fprintf('Exported %s (%d voxels)\n', outCsv, height(TBL));
 
-    % ---- Optional sanity checks (uncomment if you want) ----
-    % For an 8mm MNI grid you often expect coords ~ multiples of 2 or 8 depending on template.
+    % ---- Optional sanity checks ----
+    % For an 8mm MNI grid ~ multiples of 2 or 8 depending on template.
     % If these look wild, the header transform is likely not correct.
     % disp(TBL(1:min(5,height(TBL)),:));
 end
@@ -4152,10 +4151,11 @@ end
 % Please check the BROADNESS GitHub repository for new releases.  
 % https://github.com/leonardob92/BROADNESS_MEG_AuditoryRecognition/tree/main/BROADNESS_Toolbox
 % Feel free to reach out to us if you need guidance or consultation.  
-% Leonardo Bonetti: leonardo.bonetti@clin.au.dk
-%                   leonardo.bonetti@psych.ox.ac.uk
-% Mattia Rosso:     mattia.rosso@clin.au.dk
-% Chiara Malvaso:   chiara.malvaso@studio.unibo.it
+% Leonardo Bonetti:         leonardo.bonetti@clin.au.dk
+%                           leonardo.bonetti@psych.ox.ac.uk
+% Mattia Rosso:             mattia.rosso@clin.au.dk
+% Chiara Malvaso:           chiara.malvaso@studio.unibo.it
+% Mathias Houe Andersen     mathiasha@drcmr.dk
 %
 %  Please cite the first BROADNESS paper if using the BROADNESS toolbox:
 %  Bonetti, L., Fernandez-Rubio, G., Andersen, M. H., Malvaso, C., Carlomagno,
