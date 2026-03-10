@@ -445,7 +445,6 @@ networkFiles = {
 atlasNiftiPath  = '/main_path/AAL3/AAL3v1.nii';
 atlasLabelsPath = '/main_path/AAL3/AAL3v1.nii.txt';
 
-% Otherwise leave as "" to let the script guess.
 contributionColumnOverride = "";  % e.g., "Contribution", "Weight", "Loading", "Beta", "Z", etc.
 
 % What to do with atlas voxels that map to 0 / background / unknown
