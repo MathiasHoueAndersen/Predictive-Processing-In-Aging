@@ -1,11 +1,11 @@
-% 
 % ========================================================================
-%  The Ageing Brain Elicits Increased Hierarchical Prediction Error Signalling in Auditory and Cingulate Brain Networks
+%  Network reconfiguration preserves prediction error signalling in the aging brain
 %
 %  Please cite the preprint:
-%  Authors. Archive server.
-%  Title.
-%  https://doi.org/X
+%  Mathias Houe Andersen, Gemma Fernández-Rubio, David R. Quiroga-Martinez, Mattia Rosso, Mathias Klarlund,
+%  Kit Melissa Larsen, Hartwig Roman Siebner, Morten L. Kringelbach, Peter Vuust, Leonardo Bonetti. bioRxiv.
+%  Network reconfiguration preserves prediction error signalling in the aging brain.
+%  https://doi.org/10.64898/2026.04.11.717798
 %
 % ========================================================================
 %
@@ -36,7 +36,7 @@
 %  time series for each participant for statistical analysis.
 %  The spatial activation patterns of the networks is instead provided for
 %  the group level.
-%  Note that if you wish to only have a quick computation of the data averaged across
+%  Note that if you wish to only have a quick computation on the data averaged across
 %  participants, you can use the data averaged across participants available
 %  in "MMNSubtracted_Average_SignFixed.mat".
 %
@@ -107,21 +107,20 @@ close all
 clc
 
 % Setup directories
-path_home = '/main_path/BROADNESS_MEG_AuditoryRecognition-main/BROADNESS_Toolbox';
+path_home = '/mainpath/BROADNESS_MEG_AuditoryRecognition-main/BROADNESS_Toolbox';
 addpath(path_home)
 BROADNESS_Startup(path_home);
 addpath(fullfile(matlabroot,'toolbox','stats','stats'),'-begin') % makes sure the pca function is the standard function in matlab
 
 %%
 
-%% 1a) PERFORM BROADNESS (ONLY ESSENTIAL INPUTS)
+%% 1a) PERFORM BROADNESS
 
 %%% ------------------- USER SETTINGS ------------------- %%%
 
 % Load data
-load('/main_path/Data/Mathias_MMN/MMNSubtracted_Average_SignFixed.mat');
+load('/mainpath/MMNSubtracted_Average_SignFixed.mat');
 DATA = dum;
-
 % Remove first participant and define time vector with a 100 ms baseline
 time = -0.100:0.004:0.8;
 DATA = DATA(:,101:326,:,2:78); 
@@ -129,7 +128,7 @@ DATA = DATA(:,101:326,:,2:78);
 size(DATA)
 
 % Load groups and adjust subid after removing first participant
-load('/main_path/Data/Mathias_MMN/groups.mat');
+load('/mainpath/groups.mat');
 older = older - 1;
 young = young - 1;
 
@@ -331,7 +330,7 @@ hold(ax,'off');
 
 % Common options
 Options = [];
-Options.name_nii = '/main_path/Output';
+Options.name_nii = '/mainpath/Output';
 load([path_home '/BROADNESS_External/MNI152_8mm_coord_dyi.mat']); 
 Options.MNI_coords = MNI8;
 
@@ -356,7 +355,7 @@ Options.Labels = {'Younger adults - Local effect'}; BROADNESS_Visualizer(BROADNE
 
 % Minimal user settings: output folder
 Options = [];
-Options.name_nii = '/main_path/Output'; %output folder
+Options.name_nii = '/mainpath/Output'; %output folder
 load([path_home '/BROADNESS_External/MNI152_8mm_coord_dyi.mat']); %all voxels MNI coordinates
 Options.MNI_coords = MNI8;
 Options.WhichPlots = [1 1 1 1 1]; %which plots to be generated
@@ -435,16 +434,16 @@ clear; clc;
 
 % ----------------------- USER SETTINGS -----------------------
 networkFiles = {
-    '/main_path/Output/BROADNESS_Output/BROADNESS_nifti/ActivationTable_BrainNetwork_1.xlsx'
-    '/main_path/Output/BROADNESS_Output/BROADNESS_nifti/ActivationTable_BrainNetwork_2.xlsx'
-    '/main_path/Output/BROADNESS_Output/BROADNESS_nifti/ActivationTable_BrainNetwork_3.xlsx'
+    '/mainpath/Output/BROADNESS_Output/BROADNESS_nifti/ActivationTable_BrainNetwork_1.xlsx'
+    '/mainpath/Output/BROADNESS_Output/BROADNESS_nifti/ActivationTable_BrainNetwork_2.xlsx'
+    '/mainpath/Output/BROADNESS_Output/BROADNESS_nifti/ActivationTable_BrainNetwork_3.xlsx'
 };
 
 % Choose an atlas in MNI space (NIfTI) + a label lookup (CSV/TXT).
-% The AAL Atlas (version 3.1) can be downloaded here: https://www.oxcns.org/aal3.html
-atlasNiftiPath  = '/main_path/AAL3/AAL3v1.nii';
-atlasLabelsPath = '/main_path/AAL3/AAL3v1.nii.txt';
+atlasNiftiPath  = '/mainpath/AAL3/AAL3v1.nii';
+atlasLabelsPath = '/mainpath/AAL3/AAL3v1.nii.txt';
 
+% Otherwise leave as "" to let the script guess.
 contributionColumnOverride = "";  % e.g., "Contribution", "Weight", "Loading", "Beta", "Z", etc.
 
 % What to do with atlas voxels that map to 0 / background / unknown
@@ -454,7 +453,7 @@ unknownLabelName = "Unknown/Background";
 maxSearchRadius = 3;   % 0 = exact only; 1 = allow shell radius 1; etc.
 
 % Output folder (will be created if missing)
-outDir = fullfile('/main_path/', 'voxel_counts_by_area');
+outDir = fullfile('/mainpath/', 'voxel_counts_by_area');
 if ~exist(outDir, 'dir'); mkdir(outDir); end
 % ------------------------------------------------------------
 
@@ -579,7 +578,7 @@ function lut = loadAtlasLUT(labelsPath, unknownLabelName)
             ids = str2double(string(ids));
         end
         if any(isnan(ids))
-            error('Atlas LUT ids contain NaNs after parsing. Check your CSV LUT format.');
+            error('Atlas LUT ids contain NaNs after parsing. Check the CSV LUT format.');
         end
 
         lut = containers.Map('KeyType','double','ValueType','char');
@@ -961,7 +960,7 @@ end
 %   A .mat file with RES struct containing observed effects, thresholds, significant masks,
 %   cluster lists, and convenience metadata; plus several diagnostic PNG plots.
 
-stats_outdir = '/main_path/Output/ANOVA_Stats';
+stats_outdir = '/mainpath/Output/ANOVA_Stats';
 if ~exist(stats_outdir,'dir'); mkdir(stats_outdir); end  % ensure output folder exists
 
 % ---- Parameters ----
@@ -1433,7 +1432,7 @@ end
 % Output:
 %   - PNG saved in stats_outdir
 
-stats_outdir = '/main_path/Output/ANOVA_Stats';
+stats_outdir = '/mainpath/Output/ANOVA_Stats';
 
 % --------- sanity on 6) outputs ---------
 need_files = {
@@ -1956,7 +1955,7 @@ function [lat, amp] = local_get_peak(tt, xx, t1, t2, polarity)
 end
 
 
-stats_outdir = '/main_path/Output/ANOVA_Stats';
+stats_outdir = '/mainpath/Output/ANOVA_Stats';
 
 if ~exist('time','var') || isempty(time)
     error('7: time vector not found in workspace.');
@@ -2499,7 +2498,1433 @@ function plot_time_colored_segments(x, y, lineStyle, lw, cmap)
 end
 
 
-%% 3d) STATS - RQA ANOVA TEST
+%% 3d) PHASE-SPACE AGE-GROUP STATISTICS
+% Tests whether younger and older adults differ in 3D phase-space mean trajectory
+% separation within each condition: LOCAL and GLOBAL.
+%
+% Logic:
+%   1) Use PC1/PC2/PC3 phase-space coordinates for every participant.
+%   2) For each condition and time point, compute the young group mean
+%      trajectory and the older group mean trajectory.
+%   3) For every time point from 0 to 800 ms, compute:
+%
+%          D(t) = || mean_young(t) - mean_older(t) ||
+%
+%      where the norm is Euclidean distance in 3D phase space.
+%   4) Create a null distribution by shuffling age-group labels across
+%      participants while preserving the original group sizes.
+%   5) Use cluster-based permutation testing over time with 5000 permutations.
+%   6) Plot 3D mean trajectories. Non-significant segments are gray;
+%      significant segments use the same jet time-coloring as the phase-space plots.
+%
+% IMPORTANT INTERPRETATION:
+% This tests whether the average young and older trajectories are separated
+% in 3D phase space. It does not test within-group dispersion around a pooled
+% centroid. Because D(t) is non-negative, the test is inherently directional
+% in the sense of larger-than-null separation; opts.tail is retained only for
+% compatibility with earlier code and is not used by the distance test.
+
+% ------------------- USER SETTINGS -------------------
+phase_stats_opts = struct();
+phase_stats_opts.nPerm              = 5000;
+phase_stats_opts.alpha              = 0.05;
+phase_stats_opts.clusterAlpha       = 0.05;
+phase_stats_opts.testWindow         = [-0.100 0.800];
+phase_stats_opts.condToUse          = 1;
+phase_stats_opts.tail               = 'two';
+phase_stats_opts.randomSeed         = 42;
+phase_stats_opts.outDir             = fullfile(pwd, 'PhaseSpace_AgeGroup_Stats');
+phase_stats_opts.saveFigures        = true;
+phase_stats_opts.showFigures        = true;
+phase_stats_opts.lineWidth          = 2.5;
+phase_stats_opts.grayColor          = [0.65 0.65 0.65];
+phase_stats_opts.youngMarker        = 'none';
+phase_stats_opts.olderMarker        = 'none';
+phase_stats_opts.savePermutationXlsx = true;
+
+if ~exist(phase_stats_opts.outDir, 'dir')
+    mkdir(phase_stats_opts.outDir);
+end
+
+RQA_BROADNESS_young_local  = BROADNESS_PhaseSpace_RQA(BROADNESS_young_local,  'principalcomps',[1:3], 'threshold',0.1, 'video','off', 'figure','off', 'plotlabel','Yl');
+RQA_BROADNESS_older_local  = BROADNESS_PhaseSpace_RQA(BROADNESS_older_local,  'principalcomps',[1:3], 'threshold',0.1, 'video','off', 'figure','off', 'plotlabel','Ol');
+RQA_BROADNESS_young_global = BROADNESS_PhaseSpace_RQA(BROADNESS_young_global, 'principalcomps',[1:3], 'threshold',0.1, 'video','off', 'figure','off', 'plotlabel','Yg');
+RQA_BROADNESS_older_global = BROADNESS_PhaseSpace_RQA(BROADNESS_older_global, 'principalcomps',[1:3], 'threshold',0.1, 'video','off', 'figure','off', 'plotlabel','Og');
+
+PhaseStats_Local = run_phase_space_age_stats( ...
+    RQA_BROADNESS_young_local, RQA_BROADNESS_older_local, ...
+    'Local', phase_stats_opts);
+
+PhaseStats_Global = run_phase_space_age_stats( ...
+    RQA_BROADNESS_young_global, RQA_BROADNESS_older_global, ...
+    'Global', phase_stats_opts);
+
+save(fullfile(phase_stats_opts.outDir, 'PhaseSpace_AgeGroup_ClusterStats.mat'), ...
+    'PhaseStats_Local', 'PhaseStats_Global', 'phase_stats_opts');
+
+writetable(PhaseStats_Local.clusterTable,  fullfile(phase_stats_opts.outDir, 'PhaseSpace_AgeGroup_Clusters.xlsx'), 'Sheet','Local');
+writetable(PhaseStats_Global.clusterTable, fullfile(phase_stats_opts.outDir, 'PhaseSpace_AgeGroup_Clusters.xlsx'), 'Sheet','Global');
+
+fprintf('\nSaved phase-space age-group statistics to:\n%s\n', phase_stats_opts.outDir);
+
+
+
+
+%% 3e) PHASE-SPACE LOCAL-vs-GLOBAL STATISTICS ACROSS ALL PARTICIPANTS
+% Tests whether the LOCAL and GLOBAL 3D phase-space mean trajectories differ
+% across all participants, collapsing across age group.
+%
+% Logic:
+%   1) Use PC1/PC2/PC3 phase-space coordinates for every participant.
+%   2) Combine younger and older participants into one all-participants sample.
+%   3) For every time point from 0 to 800 ms, compute:
+%
+%          D(t) = || mean_local(t) - mean_global(t) ||
+%
+%      where the norm is Euclidean distance in 3D phase space.
+%   4) Create a null distribution by randomly swapping LOCAL/GLOBAL labels
+%      within each participant while preserving participant pairing.
+%   5) Use cluster-based permutation testing over time with the same settings
+%      as above.
+%   6) Plot 3D mean trajectories. Non-significant segments are gray;
+%      significant segments use the same jet time-coloring as the phase-space plots.
+%
+% IMPORTANT INTERPRETATION:
+% This tests whether the average LOCAL and GLOBAL trajectories are separated
+% in 3D phase space across all participants. It assumes participant order is
+% matched between LOCAL and GLOBAL within each age group.
+
+PhaseStats_LocalVsGlobal_AllParticipants = run_phase_space_local_global_stats_all_participants( ...
+    RQA_BROADNESS_young_local, RQA_BROADNESS_older_local, ...
+    RQA_BROADNESS_young_global, RQA_BROADNESS_older_global, ...
+    phase_stats_opts);
+
+save(fullfile(phase_stats_opts.outDir, 'PhaseSpace_LocalVsGlobal_AllParticipants_ClusterStats.mat'), ...
+    'PhaseStats_LocalVsGlobal_AllParticipants', 'phase_stats_opts');
+
+writetable(PhaseStats_LocalVsGlobal_AllParticipants.clusterTable, ...
+    fullfile(phase_stats_opts.outDir, 'PhaseSpace_LocalVsGlobal_AllParticipants_Clusters.xlsx'), ...
+    'Sheet','LocalVsGlobal_AllParticipants');
+
+fprintf('\nSaved phase-space local-vs-global all-participants statistics to:\n%s\n', phase_stats_opts.outDir);
+
+
+%% ======================= LOCAL FUNCTIONS =======================
+
+function OUT = run_phase_space_age_stats(RQA_young, RQA_older, conditionLabel, opts)
+    require_participant_phase_space(RQA_young, 'RQA_young');
+    require_participant_phase_space(RQA_older, 'RQA_older');
+
+    cond = opts.condToUse;
+
+    [tY, Y] = rqa_to_3d_array(RQA_young, cond);
+    [tO, O] = rqa_to_3d_array(RQA_older, cond);
+
+    [t, Y, O] = align_group_phase_spaces(tY, Y, tO, O);
+
+    if size(Y,2) ~= 3 || size(O,2) ~= 3
+        error('%s: expected 3D phase space. Re-run RQA with ''principalcomps'',[1:3].', conditionLabel);
+    end
+
+    winMask = t >= opts.testWindow(1) & t <= opts.testWindow(2);
+    if ~any(winMask)
+        error('%s: no time samples found in requested test window [%.3f %.3f] s.', ...
+            conditionLabel, opts.testWindow(1), opts.testWindow(2));
+    end
+
+    tW = t(winMask);
+    YW = Y(winMask,:,:);
+    OW = O(winMask,:,:);
+
+    meanY = mean(YW, 3, 'omitnan');
+    meanO = mean(OW, 3, 'omitnan');
+
+    observedDistance = euclidean_distance_between_trajectories(meanY, meanO);
+
+    stats = cluster_perm_mean_trajectory_distance(YW, OW, opts.nPerm, opts.clusterAlpha, opts.alpha, opts.randomSeed);
+
+    OUT = struct();
+    OUT.conditionLabel = conditionLabel;
+    OUT.time = tW(:);
+    OUT.youngMeanTrajectory = meanY;
+    OUT.olderMeanTrajectory = meanO;
+    OUT.observedDistance = observedDistance(:)';
+    OUT.youngParticipantTrajectories = YW;
+    OUT.olderParticipantTrajectories = OW;
+    OUT.stats = stats;
+    OUT.clusterTable = make_cluster_table(stats, tW, conditionLabel);
+
+    if isfield(opts, 'savePermutationXlsx') && opts.savePermutationXlsx
+        save_phase_space_permutation_details_xlsx(OUT, opts);
+    end
+
+    plot_phase_space_age_stats_3d(OUT, opts);
+end
+
+function require_participant_phase_space(RQA, nameStr)
+    if ~isfield(RQA, 'PhaseSpace') || ~isfield(RQA.PhaseSpace, 'participant_coords') || ~isfield(RQA.PhaseSpace, 'time')
+        error(['%s lacks RQA.PhaseSpace.participant_coords. Replace BROADNESS_PhaseSpace_RQA.m ', ...
+               'with the modified helper code and re-run the RQA calls.'], nameStr);
+    end
+end
+
+function [t, A] = rqa_to_3d_array(RQA, cond)
+    t = RQA.PhaseSpace.time(:);
+    pcells = RQA.PhaseSpace.participant_coords;
+
+    if cond > size(pcells,1)
+        error('Requested condition %d, but RQA output only has %d condition(s).', cond, size(pcells,1));
+    end
+
+    nP = size(pcells,2);
+    first = pcells{cond,1};
+    nT = size(first,1);
+    nD = size(first,2);
+    A = nan(nT, nD, nP);
+
+    for p = 1:nP
+        X = pcells{cond,p};
+        if size(X,1) ~= nT || size(X,2) ~= nD
+            error('Participant %d has inconsistent phase-space size.', p);
+        end
+        A(:,:,p) = X;
+    end
+
+    n = min(numel(t), size(A,1));
+    t = t(1:n);
+    A = A(1:n,:,:);
+end
+
+function [t, Y, O] = align_group_phase_spaces(tY, Y, tO, O)
+    sameTime = numel(tY) == numel(tO) && all(abs(tY(:)-tO(:)) < 1e-12);
+    if sameTime
+        t = tY(:);
+        return;
+    end
+
+    t = tY(:);
+    O2 = nan(numel(t), size(O,2), size(O,3));
+    for p = 1:size(O,3)
+        for d = 1:size(O,2)
+            O2(:,d,p) = interp1(tO(:), O(:,d,p), t, 'linear', 'extrap');
+        end
+    end
+    O = O2;
+end
+
+function D = euclidean_distance_between_trajectories(A, B)
+    dif = A - B;
+    D = sqrt(sum(dif.^2, 2))';
+end
+
+function S = cluster_perm_mean_trajectory_distance(Y, O, nPerm, clusterAlpha, alpha, randomSeed)
+    rng(randomSeed, 'twister');
+
+    nY = size(Y,3);
+    nT = size(Y,1);
+
+    meanY = mean(Y, 3, 'omitnan');
+    meanO = mean(O, 3, 'omitnan');
+    distanceObs = euclidean_distance_between_trajectories(meanY, meanO);
+
+    allData = cat(3, Y, O);
+    nAll = size(allData,3);
+
+    permDistance = zeros(nPerm, nT);
+    for ip = 1:nPerm
+        idx = randperm(nAll);
+        Yp = allData(:,:,idx(1:nY));
+        Op = allData(:,:,idx(nY+1:end));
+
+        meanYp = mean(Yp, 3, 'omitnan');
+        meanOp = mean(Op, 3, 'omitnan');
+        permDistance(ip,:) = euclidean_distance_between_trajectories(meanYp, meanOp);
+    end
+
+    pObs_uncorrected = zeros(1,nT);
+    for tt = 1:nT
+        pObs_uncorrected(tt) = (1 + sum(permDistance(:,tt) >= distanceObs(tt))) / (nPerm + 1);
+    end
+
+    distanceCrit = prctile(permDistance, 100 * (1 - clusterAlpha), 1);
+    supraObs = distanceObs > distanceCrit;
+
+    obsClusters = logical_to_clusters(supraObs);
+    obsMass = cluster_masses(distanceObs, obsClusters);
+
+    maxMassNull = zeros(nPerm,1);
+    permClusterCounts = zeros(nPerm,1);
+    for ip = 1:nPerm
+        supraPerm = permDistance(ip,:) > distanceCrit;
+        cl = logical_to_clusters(supraPerm);
+        permClusterCounts(ip) = numel(cl);
+        mass = cluster_masses(permDistance(ip,:), cl);
+        if isempty(mass)
+            maxMassNull(ip) = 0;
+        else
+            maxMassNull(ip) = max(mass);
+        end
+    end
+
+    pCluster = ones(numel(obsMass),1);
+    for c = 1:numel(obsMass)
+        pCluster(c) = (1 + sum(maxMassNull >= obsMass(c))) / (nPerm + 1);
+    end
+
+    sigMask = false(1,nT);
+    obsClusterIndex = zeros(1,nT);
+    obsClusterP_time = nan(1,nT);
+    obsClusterMass_time = nan(1,nT);
+
+    for c = 1:numel(obsClusters)
+        obsClusterIndex(obsClusters{c}) = c;
+        obsClusterP_time(obsClusters{c}) = pCluster(c);
+        obsClusterMass_time(obsClusters{c}) = obsMass(c);
+        if pCluster(c) < alpha
+            sigMask(obsClusters{c}) = true;
+        end
+    end
+
+    S = struct();
+    S.distanceObs = distanceObs;
+    S.distanceCrit = distanceCrit;
+    S.pObs_uncorrected = pObs_uncorrected;
+    S.clusterAlpha = clusterAlpha;
+    S.alpha = alpha;
+    S.nPerm = nPerm;
+    S.test = 'MeanTrajectoryEuclideanDistance_LabelShuffle';
+    S.obsClusters = obsClusters;
+    S.obsClusterMass = obsMass;
+    S.obsClusterP = pCluster;
+    S.obsClusterIndex = obsClusterIndex;
+    S.obsClusterP_time = obsClusterP_time;
+    S.obsClusterMass_time = obsClusterMass_time;
+    S.maxMassNull = maxMassNull;
+    S.permClusterCounts = permClusterCounts;
+    S.permDistance = permDistance;
+    S.significantMask = sigMask;
+end
+
+function clusters = logical_to_clusters(mask)
+    mask = mask(:)';
+    idx = find(mask);
+    clusters = {};
+    if isempty(idx), return; end
+    breaks = [1, find(diff(idx) > 1) + 1, numel(idx) + 1];
+    for b = 1:numel(breaks)-1
+        clusters{end+1} = idx(breaks(b):breaks(b+1)-1); %#ok<AGROW>
+    end
+end
+
+function mass = cluster_masses(statVals, clusters)
+    mass = zeros(numel(clusters),1);
+    for c = 1:numel(clusters)
+        idx = clusters{c};
+        mass(c) = sum(statVals(idx));
+    end
+end
+
+function T = make_cluster_table(S, t, conditionLabel)
+    nC = numel(S.obsClusters);
+    Condition = strings(nC,1);
+    Cluster = (1:nC)';
+    Start_s = nan(nC,1);
+    End_s = nan(nC,1);
+    Duration_ms = nan(nC,1);
+    ClusterMass = nan(nC,1);
+    P_cluster = nan(nC,1);
+    Significant = false(nC,1);
+
+    for c = 1:nC
+        idx = S.obsClusters{c};
+        Condition(c) = string(conditionLabel);
+        Start_s(c) = t(idx(1));
+        End_s(c) = t(idx(end));
+        Duration_ms(c) = 1000 * (End_s(c) - Start_s(c));
+        ClusterMass(c) = S.obsClusterMass(c);
+        P_cluster(c) = S.obsClusterP(c);
+        Significant(c) = P_cluster(c) < S.alpha;
+    end
+
+    T = table(Condition, Cluster, Start_s, End_s, Duration_ms, ClusterMass, P_cluster, Significant);
+end
+
+function save_phase_space_permutation_details_xlsx(OUT, opts)
+    if ~exist(opts.outDir, 'dir')
+        mkdir(opts.outDir);
+    end
+
+    safeLabel = regexprep(OUT.conditionLabel, '[^A-Za-z0-9_]+', '_');
+    outXlsx = fullfile(opts.outDir, sprintf('PhaseSpace_%s_PermutationDetails.xlsx', safeLabel));
+
+    if exist(outXlsx, 'file')
+        delete(outXlsx);
+    end
+
+    S = OUT.stats;
+    t = OUT.time(:);
+    nT = numel(t);
+    nY = size(OUT.youngParticipantTrajectories,3);
+    nO = size(OUT.olderParticipantTrajectories,3);
+
+    Setting = string({ ...
+        'Condition'; ...
+        'Test'; ...
+        'DistanceDefinition'; ...
+        'ComparedGroups'; ...
+        'nYoung'; ...
+        'nOlder'; ...
+        'nTimepoints'; ...
+        'TestWindowStart_s'; ...
+        'TestWindowEnd_s'; ...
+        'nPermutations'; ...
+        'RandomSeed'; ...
+        'ClusterFormingAlpha'; ...
+        'ClusterCorrectedAlpha'; ...
+        'ClusterFormingCriticalValue'; ...
+        'NullDefinition'; ...
+        'ImportantInterpretation'});
+
+    Value = string({ ...
+        OUT.conditionLabel; ...
+        'Euclidean distance between young and older group mean trajectories + label-shuffling cluster permutation correction over time'; ...
+        'D(t) = norm(mean_young_3D(t) - mean_older_3D(t))'; ...
+        'Younger adults vs older adults'; ...
+        num2str(nY); ...
+        num2str(nO); ...
+        num2str(nT); ...
+        sprintf('%.6f', min(t)); ...
+        sprintf('%.6f', max(t)); ...
+        num2str(S.nPerm); ...
+        num2str(opts.randomSeed); ...
+        sprintf('%.6f', S.clusterAlpha); ...
+        sprintf('%.6f', S.alpha); ...
+        'Time-point-specific 95th percentile of shuffled-label D(t) when clusterAlpha = 0.05'; ...
+        'Shuffle age-group labels across participant trajectories while preserving original group sizes'; ...
+        'This tests whether average group trajectories are separated in phase space, not whether individuals differ in distance from a pooled centroid'});
+
+    SettingsTable = table(Setting, Value);
+    writetable(SettingsTable, outXlsx, 'Sheet', 'Settings');
+
+    TimeIndex = (1:nT)';
+    Time_s = t;
+    Time_ms = 1000 .* t;
+    DistanceObserved = S.distanceObs(:);
+    DistanceCrit = S.distanceCrit(:);
+    P_uncorrected = S.pObs_uncorrected(:);
+    SupraThreshold = S.obsClusterIndex(:) > 0;
+    ClusterID = S.obsClusterIndex(:);
+    ClusterMass = S.obsClusterMass_time(:);
+    ClusterP_corrected = S.obsClusterP_time(:);
+    SignificantClusterCorrected = S.significantMask(:);
+
+    TimepointStats = table(TimeIndex, Time_s, Time_ms, DistanceObserved, DistanceCrit, ...
+        P_uncorrected, SupraThreshold, ClusterID, ClusterMass, ClusterP_corrected, ...
+        SignificantClusterCorrected, ...
+        'VariableNames', {'TimeIndex','Time_s','Time_ms','DistanceObserved_YoungMeanVsOlderMean', ...
+        'DistanceCritical_PointwisePermutation','P_uncorrected','SupraThreshold','ClusterID', ...
+        'ClusterMass','ClusterP_corrected','SignificantClusterCorrected'});
+
+    writetable(TimepointStats, outXlsx, 'Sheet', 'TimepointStats');
+    writetable(OUT.clusterTable, outXlsx, 'Sheet', 'ObservedClusters');
+
+    Permutation = (1:S.nPerm)';
+    MaxClusterMass = S.maxMassNull(:);
+    NumClusters = S.permClusterCounts(:);
+    NullDistribution = table(Permutation, MaxClusterMass, NumClusters);
+    writetable(NullDistribution, outXlsx, 'Sheet', 'NullDistribution');
+
+    PermutationDistances = array2table(S.permDistance);
+    PermutationDistances.Properties.VariableNames = make_time_varnames(t, 'Dperm');
+    PermutationDistances = addvars(PermutationDistances, Permutation, 'Before', 1);
+    writetable(PermutationDistances, outXlsx, 'Sheet', 'PermutationDistances');
+
+    Trajectories = table(TimeIndex, Time_s, Time_ms, ...
+        OUT.youngMeanTrajectory(:,1),  OUT.youngMeanTrajectory(:,2),  OUT.youngMeanTrajectory(:,3), ...
+        OUT.olderMeanTrajectory(:,1),  OUT.olderMeanTrajectory(:,2),  OUT.olderMeanTrajectory(:,3), ...
+        S.distanceObs(:), ...
+        'VariableNames', {'TimeIndex','Time_s','Time_ms', ...
+        'YoungMean_PC1','YoungMean_PC2','YoungMean_PC3', ...
+        'OlderMean_PC1','OlderMean_PC2','OlderMean_PC3', ...
+        'DistanceObserved_YoungMeanVsOlderMean'});
+    writetable(Trajectories, outXlsx, 'Sheet', 'MeanTrajectories');
+
+    YoungCoords = participant_coords_to_table(OUT.youngParticipantTrajectories, t, 'Young');
+    OlderCoords = participant_coords_to_table(OUT.olderParticipantTrajectories, t, 'Older');
+    writetable(YoungCoords, outXlsx, 'Sheet', 'YoungParticipantCoords');
+    writetable(OlderCoords, outXlsx, 'Sheet', 'OlderParticipantCoords');
+
+    fprintf('%s detailed permutation XLSX saved: %s\n', OUT.conditionLabel, outXlsx);
+end
+
+function T = participant_coords_to_table(A, t, groupLabel)
+    nT = size(A,1);
+    nP = size(A,3);
+
+    Group = strings(nT*nP,1);
+    Participant = nan(nT*nP,1);
+    TimeIndex = nan(nT*nP,1);
+    Time_s = nan(nT*nP,1);
+    Time_ms = nan(nT*nP,1);
+    PC1 = nan(nT*nP,1);
+    PC2 = nan(nT*nP,1);
+    PC3 = nan(nT*nP,1);
+
+    row = 0;
+    for p = 1:nP
+        for tt = 1:nT
+            row = row + 1;
+            Group(row) = string(groupLabel);
+            Participant(row) = p;
+            TimeIndex(row) = tt;
+            Time_s(row) = t(tt);
+            Time_ms(row) = 1000 * t(tt);
+            PC1(row) = A(tt,1,p);
+            PC2(row) = A(tt,2,p);
+            PC3(row) = A(tt,3,p);
+        end
+    end
+
+    T = table(Group, Participant, TimeIndex, Time_s, Time_ms, PC1, PC2, PC3);
+end
+
+function names = make_time_varnames(t, prefix)
+    tMs = round(1000 .* t(:));
+    names = strings(1, numel(tMs));
+    for i = 1:numel(tMs)
+        if tMs(i) < 0
+            names(i) = sprintf('%s_minus%dms', prefix, abs(tMs(i)));
+        else
+            names(i) = sprintf('%s_%dms', prefix, tMs(i));
+        end
+    end
+    names = matlab.lang.makeValidName(cellstr(names));
+    names = string(matlab.lang.makeUniqueStrings(names));
+end
+
+function plot_phase_space_age_stats_3d(OUT, opts)
+    meanY = OUT.youngMeanTrajectory;
+    meanO = OUT.olderMeanTrajectory;
+    sigMask = OUT.stats.significantMask(:)';
+
+    youngNorm = sqrt(sum(meanY.^2, 2))';
+    olderNorm = sqrt(sum(meanO.^2, 2))';
+
+    youngerGreaterMask = sigMask & (youngNorm > olderNorm);
+    olderGreaterMask = sigMask & (olderNorm > youngNorm);
+
+    axisLims = get_common_xyz_limits(meanY, meanO);
+
+    plot_phase_space_age_stats_3d_single_group(OUT, opts, meanY, youngerGreaterMask, ...
+        'Younger', 'Younger > Older', 'Younger', axisLims);
+
+    plot_phase_space_age_stats_3d_single_group(OUT, opts, meanO, olderGreaterMask, ...
+        'Older', 'Older > Younger', 'Older', axisLims);
+
+    plot_average_age_direction_trajectory(OUT, opts, youngerGreaterMask, olderGreaterMask, axisLims);
+end
+
+function axisLims = get_common_xyz_limits(meanY, meanO)
+    allXYZ = [meanY; meanO];
+
+    xLim = [min(allXYZ(:,1),[],'omitnan') max(allXYZ(:,1),[],'omitnan')];
+    yLim = [min(allXYZ(:,2),[],'omitnan') max(allXYZ(:,2),[],'omitnan')];
+    zLim = [min(allXYZ(:,3),[],'omitnan') max(allXYZ(:,3),[],'omitnan')];
+
+    xLim = pad_axis_limits(xLim);
+    yLim = pad_axis_limits(yLim);
+    zLim = pad_axis_limits(zLim);
+
+    axisLims = struct();
+    axisLims.xLim = xLim;
+    axisLims.yLim = yLim;
+    axisLims.zLim = zLim;
+end
+
+function lims = pad_axis_limits(lims)
+    if any(~isfinite(lims))
+        lims = [-1 1];
+        return;
+    end
+
+    if lims(1) == lims(2)
+        padVal = max(abs(lims(1)) * 0.05, 1e-6);
+    else
+        padVal = 0.05 * diff(lims);
+    end
+
+    lims = [lims(1)-padVal lims(2)+padVal];
+end
+
+function [youngColor, olderColor] = get_condition_age_colors(conditionLabel)
+    if strcmpi(conditionLabel, 'Local')
+        youngColor = [0.1 0.2 0.5];
+        olderColor = [0.5 0.1 0.1];
+    else
+        youngColor = [0.4 0.6 0.85];
+        olderColor = [0.8 0.2 0.2];
+    end
+end
+
+function plot_phase_space_age_stats_3d_single_group(OUT, opts, XYZ, directionMask, groupLabel, directionLabel, groupFileLabel, axisLims)
+    t = OUT.time(:);
+    cmap = jet(numel(t));
+
+    figVis = 'on';
+    if ~opts.showFigures
+        figVis = 'off';
+    end
+
+    h = figure('Visible',figVis, 'Color','w', ...
+        'Name',['Phase-space stats - ' OUT.conditionLabel ' - ' groupLabel]);
+
+    pos = get(h,'Position');
+    pos(3) = pos(3) + 60;   % increase width by 20 points
+    set(h,'Position',pos);
+
+    ax = axes('Parent', h);
+    hold(ax, 'on');
+    grid(ax, 'on');
+    box(ax, 'on');
+    view(ax, 3);
+    axis(ax, 'vis3d');
+
+    plot_colored_sig_trajectory(ax, XYZ, directionMask, cmap, opts.grayColor, opts.lineWidth);
+
+    %scatter3(ax, XYZ(1,1), XYZ(1,2), XYZ(1,3), 45, [0 0 0], 'filled', 'DisplayName','Start');
+    %scatter3(ax, XYZ(end,1), XYZ(end,2), XYZ(end,3), 45, [1 1 1], 'filled', 'MarkerEdgeColor',[0 0 0], 'DisplayName','End');
+
+    xlim(ax, axisLims.xLim);
+    ylim(ax, axisLims.yLim);
+    zlim(ax, axisLims.zLim);
+
+    xlabel(ax, 'Brain network 1');
+    ylabel(ax, 'Brain network 2');
+    zlabel(ax, 'Brain network 3');
+    title(ax, sprintf('%s: %s mean trajectory (%s)', ...
+        OUT.conditionLabel, groupLabel, directionLabel), 'Interpreter','none');
+
+    sigCmap = make_significance_time_colormap(cmap, directionMask, opts.grayColor);
+    colormap(ax, sigCmap);
+    cb = colorbar(ax);
+    cb.Label.String = 'Time (s)';
+    desiredTimes = -0.1:0.1:0.8;
+    desiredTimes = desiredTimes(desiredTimes >= min(t) & desiredTimes <= max(t));
+    cb.Ticks = (desiredTimes - min(t)) ./ (max(t) - min(t));
+    cb.TickLabels = arrayfun(@format_phase_space_time_tick, desiredTimes, 'UniformOutput', false);
+
+    hGray = plot3(ax, nan, nan, nan, '-', 'Color', opts.grayColor, 'LineWidth', opts.lineWidth);
+    hSig = plot_multicolor_dummy_legend_line_3d(ax, cmap, opts.lineWidth);
+    legend(ax, [hGray hSig], {'Non-significant segment','Significant segment'}, ...
+        'Location','southoutside', 'Orientation','horizontal');
+
+    set(ax, 'FontName','Helvetica');
+    set(findall(h,'Type','text'), 'FontName','Helvetica');
+
+    if opts.saveFigures
+        safeLabel = regexprep(OUT.conditionLabel, '[^A-Za-z0-9_]+', '_');
+        outPng = fullfile(opts.outDir, sprintf('PhaseSpace_%s_%s_AgeGroupClusterStats_3D.png', ...
+            safeLabel, groupFileLabel));
+        print(h, outPng, '-dpng', '-r300');
+        fprintf('%s %s 3D figure saved: %s\n', OUT.conditionLabel, groupLabel, outPng);
+    end
+end
+
+function plot_significance_time_line_single_group(OUT, opts, directionMask, groupLabel, directionLabel, groupFileLabel)
+    t = OUT.time(:);
+    tMs = 1000 .* t;
+    cmap = jet(numel(t));
+
+    figVis = 'on';
+    if ~opts.showFigures
+        figVis = 'off';
+    end
+
+    h = figure('Visible',figVis, 'Color','w', ...
+        'Name',['Significant time points - ' OUT.conditionLabel ' - ' groupLabel]);
+
+    pos = get(h,'Position');
+    pos(3) = pos(3) + 60;   % increase width by 20 points
+    set(h,'Position',pos);
+
+    axLine = axes('Parent', h);
+    hold(axLine, 'on');
+    box(axLine, 'off');
+
+    plot_significance_time_line(axLine, tMs, directionMask, cmap, opts.grayColor, opts.lineWidth);
+
+    xlim(axLine, [min(tMs) max(tMs)]);
+    ylim(axLine, [-1 1]);
+    yticks(axLine, []);
+    xlabel(axLine, 'Time (ms)');
+    title(axLine, sprintf('%s: %s significant time points (%s)', ...
+        OUT.conditionLabel, groupLabel, directionLabel), 'Interpreter','none');
+
+    colormap(axLine, cmap);
+    cb = colorbar(axLine);
+    cb.Label.String = 'Time (s)';
+    desiredTimes = -0.1:0.1:0.8;
+    desiredTimes = desiredTimes(desiredTimes >= min(t) & desiredTimes <= max(t));
+    cb.Ticks = (desiredTimes - min(t)) ./ (max(t) - min(t));
+    cb.TickLabels = arrayfun(@format_phase_space_time_tick, desiredTimes, 'UniformOutput', false);
+
+    hGray = plot(axLine, nan, nan, '-', 'Color', opts.grayColor, 'LineWidth', opts.lineWidth);
+    hSig = plot_multicolor_dummy_legend_line_2d(axLine, cmap, opts.lineWidth);
+    legend(axLine, [hGray hSig], {'Non-significant segment','Significant segment'}, 'Location','best');
+
+    set(axLine, 'FontName','Helvetica');
+    set(findall(h,'Type','text'), 'FontName','Helvetica');
+
+    if opts.saveFigures
+        safeLabel = regexprep(OUT.conditionLabel, '[^A-Za-z0-9_]+', '_');
+        outPng = fullfile(opts.outDir, sprintf('PhaseSpace_%s_%s_SignificantTimeLine.png', ...
+            safeLabel, groupFileLabel));
+        print(h, outPng, '-dpng', '-r300');
+        fprintf('%s %s significance-line figure saved: %s\n', OUT.conditionLabel, groupLabel, outPng);
+    end
+end
+
+function plot_average_age_direction_trajectory(OUT, opts, youngerGreaterMask, olderGreaterMask, axisLims)
+    meanY = OUT.youngMeanTrajectory;
+    meanO = OUT.olderMeanTrajectory;
+    avgXYZ = (meanY + meanO) ./ 2;
+
+    [youngColor, olderColor] = get_condition_age_colors(OUT.conditionLabel);
+
+    figVis = 'on';
+    if ~opts.showFigures
+        figVis = 'off';
+    end
+
+    h = figure('Visible',figVis, 'Color','w', ...
+        'Name',['Average age-direction trajectory - ' OUT.conditionLabel]);
+
+    pos = get(h,'Position');
+    pos(3) = pos(3) + 60;   % increase width by 20 points
+    set(h,'Position',pos);
+
+    ax = axes('Parent', h);
+    hold(ax, 'on');
+    grid(ax, 'on');
+    box(ax, 'on');
+    view(ax, 3);
+    axis(ax, 'vis3d');
+
+    plot_age_direction_trajectory(ax, avgXYZ, youngerGreaterMask, olderGreaterMask, ...
+        opts.grayColor, youngColor, olderColor, opts.lineWidth);
+
+    %scatter3(ax, avgXYZ(1,1), avgXYZ(1,2), avgXYZ(1,3), 45, [0 0 0], 'filled', 'DisplayName','Start');
+    %scatter3(ax, avgXYZ(end,1), avgXYZ(end,2), avgXYZ(end,3), 45, [1 1 1], 'filled', 'MarkerEdgeColor',[0 0 0], 'DisplayName','End');
+
+    xlim(ax, axisLims.xLim);
+    ylim(ax, axisLims.yLim);
+    zlim(ax, axisLims.zLim);
+
+    xlabel(ax, 'Brain network 1');
+    ylabel(ax, 'Brain network 2');
+    zlabel(ax, 'Brain network 3');
+    title(ax, sprintf('%s: average mean trajectory', OUT.conditionLabel), 'Interpreter','none');
+
+    avgCmap = make_age_direction_time_colormap(numel(OUT.time), youngerGreaterMask, olderGreaterMask, ...
+        opts.grayColor, youngColor, olderColor);
+    colormap(ax, avgCmap);
+    cb = colorbar(ax);
+    cb.Label.String = 'Time (s)';
+    t = OUT.time(:);
+    desiredTimes = -0.1:0.1:0.8;
+    desiredTimes = desiredTimes(desiredTimes >= min(t) & desiredTimes <= max(t));
+    cb.Ticks = (desiredTimes - min(t)) ./ (max(t) - min(t));
+    cb.TickLabels = arrayfun(@format_phase_space_time_tick, desiredTimes, 'UniformOutput', false);
+
+    hGray  = plot3(ax, nan, nan, nan, '-', 'Color', opts.grayColor, 'LineWidth', opts.lineWidth);
+    hYoung = plot3(ax, nan, nan, nan, '-', 'Color', youngColor, 'LineWidth', opts.lineWidth);
+    hOld   = plot3(ax, nan, nan, nan, '-', 'Color', olderColor, 'LineWidth', opts.lineWidth);
+    legend(ax, [hGray hYoung hOld], {'Non-significant segment','Younger > Older','Older > Younger'}, ...
+        'Location','southoutside', 'Orientation','horizontal');
+
+    set(ax, 'FontName','Helvetica');
+    set(findall(h,'Type','text'), 'FontName','Helvetica');
+
+    if opts.saveFigures
+        safeLabel = regexprep(OUT.conditionLabel, '[^A-Za-z0-9_]+', '_');
+        outPng = fullfile(opts.outDir, sprintf('PhaseSpace_%s_AverageAgeDirectionTrajectory_3D.png', safeLabel));
+        print(h, outPng, '-dpng', '-r300');
+        fprintf('%s average age-direction 3D figure saved: %s\n', OUT.conditionLabel, outPng);
+    end
+end
+
+function plot_average_age_direction_time_line(OUT, opts, youngerGreaterMask, olderGreaterMask)
+    t = OUT.time(:);
+    tMs = 1000 .* t;
+
+    [youngColor, olderColor] = get_condition_age_colors(OUT.conditionLabel);
+
+    figVis = 'on';
+    if ~opts.showFigures
+        figVis = 'off';
+    end
+
+    h = figure('Visible',figVis, 'Color','w', ...
+        'Name',['Average age-direction significant time line - ' OUT.conditionLabel]);
+
+    pos = get(h,'Position');
+    pos(3) = pos(3) + 60;   % increase width by 20 points
+    set(h,'Position',pos);
+
+    axLine = axes('Parent', h);
+    hold(axLine, 'on');
+    box(axLine, 'off');
+
+    plot_age_direction_time_line(axLine, tMs, youngerGreaterMask, olderGreaterMask, ...
+        opts.grayColor, youngColor, olderColor, opts.lineWidth);
+
+    xlim(axLine, [min(tMs) max(tMs)]);
+    ylim(axLine, [-1 1]);
+    yticks(axLine, []);
+    xlabel(axLine, 'Time (ms)');
+    title(axLine, sprintf('%s: age-direction significant time points', OUT.conditionLabel), 'Interpreter','none');
+
+    hGray  = plot(axLine, nan, nan, '-', 'Color', opts.grayColor, 'LineWidth', opts.lineWidth);
+    hYoung = plot(axLine, nan, nan, '-', 'Color', youngColor, 'LineWidth', opts.lineWidth);
+    hOld   = plot(axLine, nan, nan, '-', 'Color', olderColor, 'LineWidth', opts.lineWidth);
+    legend(axLine, [hGray hYoung hOld], {'Non-significant segment','Younger > Older','Older > Younger'}, 'Location','best');
+
+    set(axLine, 'FontName','Helvetica');
+    set(findall(h,'Type','text'), 'FontName','Helvetica');
+
+    if opts.saveFigures
+        safeLabel = regexprep(OUT.conditionLabel, '[^A-Za-z0-9_]+', '_');
+        outPng = fullfile(opts.outDir, sprintf('PhaseSpace_%s_AverageAgeDirectionTimeLine.png', safeLabel));
+        print(h, outPng, '-dpng', '-r300');
+        fprintf('%s average age-direction timeline figure saved: %s\n', OUT.conditionLabel, outPng);
+    end
+end
+
+function sigCmap = make_significance_time_colormap(cmap, sigMask, grayColor)
+    sigMask = sigMask(:);
+    sigCmap = repmat(grayColor, size(cmap,1), 1);
+
+    n = min(size(cmap,1), numel(sigMask));
+    sigCmap(1:n,:) = repmat(grayColor, n, 1);
+    sigCmap(sigMask(1:n),:) = cmap(sigMask(1:n),:);
+end
+
+function avgCmap = make_age_direction_time_colormap(nT, youngerGreaterMask, olderGreaterMask, grayColor, youngColor, olderColor)
+    youngerGreaterMask = youngerGreaterMask(:);
+    olderGreaterMask = olderGreaterMask(:);
+
+    avgCmap = repmat(grayColor, nT, 1);
+
+    nY = min(nT, numel(youngerGreaterMask));
+    nO = min(nT, numel(olderGreaterMask));
+
+    avgCmap(youngerGreaterMask(1:nY),:) = repmat(youngColor, sum(youngerGreaterMask(1:nY)), 1);
+    avgCmap(olderGreaterMask(1:nO),:) = repmat(olderColor, sum(olderGreaterMask(1:nO)), 1);
+end
+
+function tickLabel = format_phase_space_time_tick(x)
+    if abs(x) < 1e-12
+        tickLabel = '0s';
+    elseif abs(x - round(x)) < 1e-12
+        tickLabel = sprintf('%ds', round(x));
+    else
+        tickLabel = sprintf('%.1f s', x);
+    end
+end
+
+function plot_colored_sig_trajectory(ax, XYZ, sigMask, cmap, grayColor, lw)
+    n = size(XYZ,1);
+    for i = 1:(n-1)
+        if sigMask(i) || sigMask(i+1)
+            col = cmap(i,:);
+        else
+            col = grayColor;
+        end
+        plot3(ax, XYZ(i:i+1,1), XYZ(i:i+1,2), XYZ(i:i+1,3), '-', ...
+            'Color', col, 'LineWidth', lw, 'HandleVisibility','off');
+    end
+end
+
+function plot_significance_time_line(ax, tMs, sigMask, cmap, grayColor, lw)
+    n = numel(tMs);
+    y = zeros(size(tMs));
+
+    for i = 1:(n-1)
+        if sigMask(i) || sigMask(i+1)
+            col = cmap(i,:);
+        else
+            col = grayColor;
+        end
+
+        plot(ax, tMs(i:i+1), y(i:i+1), '-', ...
+            'Color', col, 'LineWidth', lw, 'HandleVisibility','off');
+    end
+end
+
+function plot_age_direction_trajectory(ax, XYZ, youngerGreaterMask, olderGreaterMask, grayColor, youngColor, olderColor, lw)
+    n = size(XYZ,1);
+
+    for i = 1:(n-1)
+        if youngerGreaterMask(i) || youngerGreaterMask(i+1)
+            col = youngColor;
+        elseif olderGreaterMask(i) || olderGreaterMask(i+1)
+            col = olderColor;
+        else
+            col = grayColor;
+        end
+
+        plot3(ax, XYZ(i:i+1,1), XYZ(i:i+1,2), XYZ(i:i+1,3), '-', ...
+            'Color', col, 'LineWidth', lw, 'HandleVisibility','off');
+    end
+end
+
+function plot_age_direction_time_line(ax, tMs, youngerGreaterMask, olderGreaterMask, grayColor, youngColor, olderColor, lw)
+    n = numel(tMs);
+    y = zeros(size(tMs));
+
+    for i = 1:(n-1)
+        if youngerGreaterMask(i) || youngerGreaterMask(i+1)
+            col = youngColor;
+        elseif olderGreaterMask(i) || olderGreaterMask(i+1)
+            col = olderColor;
+        else
+            col = grayColor;
+        end
+
+        plot(ax, tMs(i:i+1), y(i:i+1), '-', ...
+            'Color', col, 'LineWidth', lw, 'HandleVisibility','off');
+    end
+end
+
+function hGroup = plot_multicolor_dummy_legend_line_3d(ax, cmap, lw)
+    hGroup = hggroup('Parent', ax);
+    legendColors = [0 0 0.5; 0 0.5 0; 0.5 0 0];
+
+    for ii = 1:3
+        x = [ii-1 ii] ./ 3;
+        y = [0 0];
+        z = [0 0];
+        plot3(ax, x, y, z, '-', ...
+            'Color', legendColors(ii,:), ...
+            'LineWidth', lw, ...
+            'Parent', hGroup, ...
+            'HandleVisibility','off');
+    end
+
+    set(get(get(hGroup,'Annotation'),'LegendInformation'), 'IconDisplayStyle','on');
+end
+
+function hGroup = plot_multicolor_dummy_legend_line_2d(ax, cmap, lw)
+    hGroup = hggroup('Parent', ax);
+    legendColors = [0 0 0.5; 0 0.5 0; 0.5 0 0];
+
+    for ii = 1:3
+        x = [ii-1 ii] ./ 3;
+        y = [0 0];
+        plot(ax, x, y, '-', ...
+            'Color', legendColors(ii,:), ...
+            'LineWidth', lw, ...
+            'Parent', hGroup, ...
+            'HandleVisibility','off');
+    end
+
+    set(get(get(hGroup,'Annotation'),'LegendInformation'), 'IconDisplayStyle','on');
+end
+
+
+function OUT = run_phase_space_local_global_stats_all_participants(RQA_young_local, RQA_older_local, RQA_young_global, RQA_older_global, opts)
+    require_participant_phase_space(RQA_young_local,  'RQA_young_local');
+    require_participant_phase_space(RQA_older_local,  'RQA_older_local');
+    require_participant_phase_space(RQA_young_global, 'RQA_young_global');
+    require_participant_phase_space(RQA_older_global, 'RQA_older_global');
+
+    cond = opts.condToUse;
+
+    [tYL, YL] = rqa_to_3d_array(RQA_young_local,  cond);
+    [tOL, OL] = rqa_to_3d_array(RQA_older_local,  cond);
+    [tYG, YG] = rqa_to_3d_array(RQA_young_global, cond);
+    [tOG, OG] = rqa_to_3d_array(RQA_older_global, cond);
+
+    [t, YL, OL, YG, OG] = align_four_group_phase_spaces(tYL, YL, tOL, OL, tYG, YG, tOG, OG);
+
+    LocalAll  = cat(3, YL, OL);
+    GlobalAll = cat(3, YG, OG);
+
+    if size(LocalAll,3) ~= size(GlobalAll,3)
+        error('Local-vs-global comparison requires the same number of local and global participant trajectories.');
+    end
+
+    if size(LocalAll,2) ~= 3 || size(GlobalAll,2) ~= 3
+        error('Local-vs-global: expected 3D phase space. Re-run RQA with ''principalcomps'',[1:3].');
+    end
+
+    winMask = t >= opts.testWindow(1) & t <= opts.testWindow(2);
+    if ~any(winMask)
+        error('Local-vs-global: no time samples found in requested test window [%.3f %.3f] s.', ...
+            opts.testWindow(1), opts.testWindow(2));
+    end
+
+    tW = t(winMask);
+    LW = LocalAll(winMask,:,:);
+    GW = GlobalAll(winMask,:,:);
+
+    meanL = mean(LW, 3, 'omitnan');
+    meanG = mean(GW, 3, 'omitnan');
+
+    observedDistance = euclidean_distance_between_trajectories(meanL, meanG);
+
+    stats = cluster_perm_paired_condition_trajectory_distance(LW, GW, opts.nPerm, opts.clusterAlpha, opts.alpha, opts.randomSeed);
+
+    OUT = struct();
+    OUT.conditionLabel = 'LocalVsGlobal_AllParticipants';
+    OUT.time = tW(:);
+    OUT.localMeanTrajectory = meanL;
+    OUT.globalMeanTrajectory = meanG;
+    OUT.observedDistance = observedDistance(:)';
+    OUT.localParticipantTrajectories = LW;
+    OUT.globalParticipantTrajectories = GW;
+    OUT.stats = stats;
+    OUT.clusterTable = make_cluster_table(stats, tW, 'LocalVsGlobal_AllParticipants');
+
+    if isfield(opts, 'savePermutationXlsx') && opts.savePermutationXlsx
+        save_phase_space_local_global_permutation_details_xlsx(OUT, opts);
+    end
+
+    plot_phase_space_local_global_stats_3d(OUT, opts);
+end
+
+function [t, A1, A2, A3, A4] = align_four_group_phase_spaces(t1, A1, t2, A2, t3, A3, t4, A4)
+    t = t1(:);
+    A2 = interpolate_phase_space_to_time(t2, A2, t);
+    A3 = interpolate_phase_space_to_time(t3, A3, t);
+    A4 = interpolate_phase_space_to_time(t4, A4, t);
+end
+
+function Aout = interpolate_phase_space_to_time(tIn, Ain, tOut)
+    sameTime = numel(tIn) == numel(tOut) && all(abs(tIn(:)-tOut(:)) < 1e-12);
+    if sameTime
+        Aout = Ain;
+        return;
+    end
+
+    Aout = nan(numel(tOut), size(Ain,2), size(Ain,3));
+    for p = 1:size(Ain,3)
+        for d = 1:size(Ain,2)
+            Aout(:,d,p) = interp1(tIn(:), Ain(:,d,p), tOut(:), 'linear', 'extrap');
+        end
+    end
+end
+
+function S = cluster_perm_paired_condition_trajectory_distance(L, G, nPerm, clusterAlpha, alpha, randomSeed)
+    rng(randomSeed, 'twister');
+
+    nP = size(L,3);
+    nT = size(L,1);
+
+    meanL = mean(L, 3, 'omitnan');
+    meanG = mean(G, 3, 'omitnan');
+    distanceObs = euclidean_distance_between_trajectories(meanL, meanG);
+
+    permDistance = zeros(nPerm, nT);
+    for ip = 1:nPerm
+        Lp = L;
+        Gp = G;
+
+        swapMask = rand(1,nP) > 0.5;
+        for p = find(swapMask)
+            tmp = Lp(:,:,p);
+            Lp(:,:,p) = Gp(:,:,p);
+            Gp(:,:,p) = tmp;
+        end
+
+        meanLp = mean(Lp, 3, 'omitnan');
+        meanGp = mean(Gp, 3, 'omitnan');
+        permDistance(ip,:) = euclidean_distance_between_trajectories(meanLp, meanGp);
+    end
+
+    pObs_uncorrected = zeros(1,nT);
+    for tt = 1:nT
+        pObs_uncorrected(tt) = (1 + sum(permDistance(:,tt) >= distanceObs(tt))) / (nPerm + 1);
+    end
+
+    distanceCrit = prctile(permDistance, 100 * (1 - clusterAlpha), 1);
+    supraObs = distanceObs > distanceCrit;
+
+    obsClusters = logical_to_clusters(supraObs);
+    obsMass = cluster_masses(distanceObs, obsClusters);
+
+    maxMassNull = zeros(nPerm,1);
+    permClusterCounts = zeros(nPerm,1);
+    for ip = 1:nPerm
+        supraPerm = permDistance(ip,:) > distanceCrit;
+        cl = logical_to_clusters(supraPerm);
+        permClusterCounts(ip) = numel(cl);
+        mass = cluster_masses(permDistance(ip,:), cl);
+        if isempty(mass)
+            maxMassNull(ip) = 0;
+        else
+            maxMassNull(ip) = max(mass);
+        end
+    end
+
+    pCluster = ones(numel(obsMass),1);
+    for c = 1:numel(obsMass)
+        pCluster(c) = (1 + sum(maxMassNull >= obsMass(c))) / (nPerm + 1);
+    end
+
+    sigMask = false(1,nT);
+    obsClusterIndex = zeros(1,nT);
+    obsClusterP_time = nan(1,nT);
+    obsClusterMass_time = nan(1,nT);
+
+    for c = 1:numel(obsClusters)
+        obsClusterIndex(obsClusters{c}) = c;
+        obsClusterP_time(obsClusters{c}) = pCluster(c);
+        obsClusterMass_time(obsClusters{c}) = obsMass(c);
+        if pCluster(c) < alpha
+            sigMask(obsClusters{c}) = true;
+        end
+    end
+
+    S = struct();
+    S.distanceObs = distanceObs;
+    S.distanceCrit = distanceCrit;
+    S.pObs_uncorrected = pObs_uncorrected;
+    S.clusterAlpha = clusterAlpha;
+    S.alpha = alpha;
+    S.nPerm = nPerm;
+    S.test = 'MeanTrajectoryEuclideanDistance_PairedLocalGlobalWithinParticipantSwap';
+    S.obsClusters = obsClusters;
+    S.obsClusterMass = obsMass;
+    S.obsClusterP = pCluster;
+    S.obsClusterIndex = obsClusterIndex;
+    S.obsClusterP_time = obsClusterP_time;
+    S.obsClusterMass_time = obsClusterMass_time;
+    S.maxMassNull = maxMassNull;
+    S.permClusterCounts = permClusterCounts;
+    S.permDistance = permDistance;
+    S.significantMask = sigMask;
+end
+
+function save_phase_space_local_global_permutation_details_xlsx(OUT, opts)
+    if ~exist(opts.outDir, 'dir')
+        mkdir(opts.outDir);
+    end
+
+    outXlsx = fullfile(opts.outDir, 'PhaseSpace_LocalVsGlobal_AllParticipants_PermutationDetails.xlsx');
+
+    if exist(outXlsx, 'file')
+        delete(outXlsx);
+    end
+
+    S = OUT.stats;
+    t = OUT.time(:);
+    nT = numel(t);
+    nP = size(OUT.localParticipantTrajectories,3);
+
+    Setting = string({ ...
+        'Condition'; ...
+        'Test'; ...
+        'DistanceDefinition'; ...
+        'ComparedConditions'; ...
+        'nParticipants'; ...
+        'nTimepoints'; ...
+        'TestWindowStart_s'; ...
+        'TestWindowEnd_s'; ...
+        'nPermutations'; ...
+        'RandomSeed'; ...
+        'ClusterFormingAlpha'; ...
+        'ClusterCorrectedAlpha'; ...
+        'ClusterFormingCriticalValue'; ...
+        'NullDefinition'; ...
+        'ImportantInterpretation'});
+
+    Value = string({ ...
+        OUT.conditionLabel; ...
+        'Euclidean distance between local and global mean trajectories + paired within-participant local/global label-swap cluster permutation correction over time'; ...
+        'D(t) = norm(mean_local_3D(t) - mean_global_3D(t))'; ...
+        'Local vs Global across all participants'; ...
+        num2str(nP); ...
+        num2str(nT); ...
+        sprintf('%.6f', min(t)); ...
+        sprintf('%.6f', max(t)); ...
+        num2str(S.nPerm); ...
+        num2str(opts.randomSeed); ...
+        sprintf('%.6f', S.clusterAlpha); ...
+        sprintf('%.6f', S.alpha); ...
+        'Time-point-specific 95th percentile of paired swapped-label D(t) when clusterAlpha = 0.05'; ...
+        'Randomly swap LOCAL/GLOBAL labels within each participant while preserving participant pairing'; ...
+        'This tests whether average LOCAL and GLOBAL trajectories are separated in phase space across all participants'});
+
+    SettingsTable = table(Setting, Value);
+    writetable(SettingsTable, outXlsx, 'Sheet', 'Settings');
+
+    TimeIndex = (1:nT)';
+    Time_s = t;
+    Time_ms = 1000 .* t;
+    DistanceObserved = S.distanceObs(:);
+    DistanceCrit = S.distanceCrit(:);
+    P_uncorrected = S.pObs_uncorrected(:);
+    SupraThreshold = S.obsClusterIndex(:) > 0;
+    ClusterID = S.obsClusterIndex(:);
+    ClusterMass = S.obsClusterMass_time(:);
+    ClusterP_corrected = S.obsClusterP_time(:);
+    SignificantClusterCorrected = S.significantMask(:);
+
+    TimepointStats = table(TimeIndex, Time_s, Time_ms, DistanceObserved, DistanceCrit, ...
+        P_uncorrected, SupraThreshold, ClusterID, ClusterMass, ClusterP_corrected, ...
+        SignificantClusterCorrected, ...
+        'VariableNames', {'TimeIndex','Time_s','Time_ms','DistanceObserved_LocalMeanVsGlobalMean', ...
+        'DistanceCritical_PointwisePermutation','P_uncorrected','SupraThreshold','ClusterID', ...
+        'ClusterMass','ClusterP_corrected','SignificantClusterCorrected'});
+
+    writetable(TimepointStats, outXlsx, 'Sheet', 'TimepointStats');
+    writetable(OUT.clusterTable, outXlsx, 'Sheet', 'ObservedClusters');
+
+    Permutation = (1:S.nPerm)';
+    MaxClusterMass = S.maxMassNull(:);
+    NumClusters = S.permClusterCounts(:);
+    NullDistribution = table(Permutation, MaxClusterMass, NumClusters);
+    writetable(NullDistribution, outXlsx, 'Sheet', 'NullDistribution');
+
+    PermutationDistances = array2table(S.permDistance);
+    PermutationDistances.Properties.VariableNames = make_time_varnames(t, 'Dperm');
+    PermutationDistances = addvars(PermutationDistances, Permutation, 'Before', 1);
+    writetable(PermutationDistances, outXlsx, 'Sheet', 'PermutationDistances');
+
+    Trajectories = table(TimeIndex, Time_s, Time_ms, ...
+        OUT.localMeanTrajectory(:,1),   OUT.localMeanTrajectory(:,2),   OUT.localMeanTrajectory(:,3), ...
+        OUT.globalMeanTrajectory(:,1),  OUT.globalMeanTrajectory(:,2),  OUT.globalMeanTrajectory(:,3), ...
+        S.distanceObs(:), ...
+        'VariableNames', {'TimeIndex','Time_s','Time_ms', ...
+        'LocalMean_PC1','LocalMean_PC2','LocalMean_PC3', ...
+        'GlobalMean_PC1','GlobalMean_PC2','GlobalMean_PC3', ...
+        'DistanceObserved_LocalMeanVsGlobalMean'});
+    writetable(Trajectories, outXlsx, 'Sheet', 'MeanTrajectories');
+
+    LocalCoords = condition_participant_coords_to_table(OUT.localParticipantTrajectories, t, 'Local');
+    GlobalCoords = condition_participant_coords_to_table(OUT.globalParticipantTrajectories, t, 'Global');
+    writetable(LocalCoords, outXlsx, 'Sheet', 'LocalParticipantCoords');
+    writetable(GlobalCoords, outXlsx, 'Sheet', 'GlobalParticipantCoords');
+
+    fprintf('Local-vs-global detailed permutation XLSX saved: %s\', outXlsx);
+end
+
+function T = condition_participant_coords_to_table(A, t, conditionLabel)
+    nT = size(A,1);
+    nP = size(A,3);
+
+    Condition = strings(nT*nP,1);
+    Participant = nan(nT*nP,1);
+    TimeIndex = nan(nT*nP,1);
+    Time_s = nan(nT*nP,1);
+    Time_ms = nan(nT*nP,1);
+    PC1 = nan(nT*nP,1);
+    PC2 = nan(nT*nP,1);
+    PC3 = nan(nT*nP,1);
+
+    row = 0;
+    for p = 1:nP
+        for tt = 1:nT
+            row = row + 1;
+            Condition(row) = string(conditionLabel);
+            Participant(row) = p;
+            TimeIndex(row) = tt;
+            Time_s(row) = t(tt);
+            Time_ms(row) = 1000 * t(tt);
+            PC1(row) = A(tt,1,p);
+            PC2(row) = A(tt,2,p);
+            PC3(row) = A(tt,3,p);
+        end
+    end
+
+    T = table(Condition, Participant, TimeIndex, Time_s, Time_ms, PC1, PC2, PC3);
+end
+
+function plot_phase_space_local_global_stats_3d(OUT, opts)
+    meanL = OUT.localMeanTrajectory;
+    meanG = OUT.globalMeanTrajectory;
+    sigMask = OUT.stats.significantMask(:)';
+
+    localNorm = sqrt(sum(meanL.^2, 2))';
+    globalNorm = sqrt(sum(meanG.^2, 2))';
+
+    localGreaterMask = sigMask & (localNorm > globalNorm);
+    globalGreaterMask = sigMask & (globalNorm > localNorm);
+
+    axisLims = get_common_xyz_limits(meanL, meanG);
+
+    plot_phase_space_local_global_stats_3d_single_condition(OUT, opts, meanL, localGreaterMask, ...
+        'Local', 'Local > Global', 'Local', axisLims);
+
+    plot_phase_space_local_global_stats_3d_single_condition(OUT, opts, meanG, globalGreaterMask, ...
+        'Global', 'Global > Local', 'Global', axisLims);
+
+    plot_average_local_global_direction_trajectory(OUT, opts, localGreaterMask, globalGreaterMask, axisLims);
+end
+
+function [localColor, globalColor] = get_local_global_colors()
+    localColor = [0.1 0.2 0.5];
+    globalColor = [0.8 0.2 0.2];
+end
+
+function plot_phase_space_local_global_stats_3d_single_condition(OUT, opts, XYZ, directionMask, conditionLabel, directionLabel, conditionFileLabel, axisLims)
+    t = OUT.time(:);
+    cmap = jet(numel(t));
+
+    figVis = 'on';
+    if ~opts.showFigures
+        figVis = 'off';
+    end
+
+    h = figure('Visible',figVis, 'Color','w', ...
+        'Name',['Phase-space stats - LocalVsGlobal - ' conditionLabel]);
+
+    pos = get(h,'Position');
+    pos(3) = pos(3) + 60;   % increase width by 20 points
+    set(h,'Position',pos);
+
+    ax = axes('Parent', h);
+    hold(ax, 'on');
+    grid(ax, 'on');
+    box(ax, 'on');
+    view(ax, 3);
+    axis(ax, 'vis3d');
+
+    plot_colored_sig_trajectory(ax, XYZ, directionMask, cmap, opts.grayColor, opts.lineWidth);
+
+    xlim(ax, axisLims.xLim);
+    ylim(ax, axisLims.yLim);
+    zlim(ax, axisLims.zLim);
+
+    xlabel(ax, 'Brain network 1');
+    ylabel(ax, 'Brain network 2');
+    zlabel(ax, 'Brain network 3');
+    title(ax, sprintf('Local vs Global: %s mean trajectory (%s)', ...
+        conditionLabel, directionLabel), 'Interpreter','none');
+
+    sigCmap = make_significance_time_colormap(cmap, directionMask, opts.grayColor);
+    colormap(ax, sigCmap);
+    cb = colorbar(ax);
+    cb.Label.String = 'Time (s)';
+    desiredTimes = -0.1:0.1:0.8;
+    desiredTimes = desiredTimes(desiredTimes >= min(t) & desiredTimes <= max(t));
+    cb.Ticks = (desiredTimes - min(t)) ./ (max(t) - min(t));
+    cb.TickLabels = arrayfun(@format_phase_space_time_tick, desiredTimes, 'UniformOutput', false);
+
+    hGray = plot3(ax, nan, nan, nan, '-', 'Color', opts.grayColor, 'LineWidth', opts.lineWidth);
+    hSig = plot_multicolor_dummy_legend_line_3d(ax, cmap, opts.lineWidth);
+    legend(ax, [hGray hSig], {'Non-significant segment','Significant segment'}, ...
+        'Location','southoutside', 'Orientation','horizontal');
+
+    set(ax, 'FontName','Helvetica');
+    set(findall(h,'Type','text'), 'FontName','Helvetica');
+
+    if opts.saveFigures
+        outPng = fullfile(opts.outDir, sprintf('PhaseSpace_LocalVsGlobal_AllParticipants_%s_ConditionClusterStats_3D.png', ...
+            conditionFileLabel));
+        print(h, outPng, '-dpng', '-r300');
+        fprintf('Local-vs-global %s 3D figure saved: %s\', conditionLabel, outPng);
+    end
+end
+
+function plot_average_local_global_direction_trajectory(OUT, opts, localGreaterMask, globalGreaterMask, axisLims)
+    meanL = OUT.localMeanTrajectory;
+    meanG = OUT.globalMeanTrajectory;
+    avgXYZ = (meanL + meanG) ./ 2;
+
+    [localColor, globalColor] = get_local_global_colors();
+
+    figVis = 'on';
+    if ~opts.showFigures
+        figVis = 'off';
+    end
+
+    h = figure('Visible',figVis, 'Color','w', ...
+        'Name','Average local-global direction trajectory - all participants');
+
+    pos = get(h,'Position');
+    pos(3) = pos(3) + 60;
+    set(h,'Position',pos);
+
+    ax = axes('Parent', h);
+    hold(ax, 'on');
+    grid(ax, 'on');
+    box(ax, 'on');
+    view(ax, 3);
+    axis(ax, 'vis3d');
+
+    plot_local_global_direction_trajectory(ax, avgXYZ, localGreaterMask, globalGreaterMask, ...
+        opts.grayColor, localColor, globalColor, opts.lineWidth);
+
+    xlim(ax, axisLims.xLim);
+    ylim(ax, axisLims.yLim);
+    zlim(ax, axisLims.zLim);
+
+    xlabel(ax, 'Brain network 1');
+    ylabel(ax, 'Brain network 2');
+    zlabel(ax, 'Brain network 3');
+    title(ax, 'Local vs Global: average mean trajectory', 'Interpreter','none');
+
+    avgCmap = make_local_global_direction_time_colormap(numel(OUT.time), localGreaterMask, globalGreaterMask, ...
+        opts.grayColor, localColor, globalColor);
+    colormap(ax, avgCmap);
+    cb = colorbar(ax);
+    cb.Label.String = 'Time (s)';
+    t = OUT.time(:);
+    desiredTimes = -0.1:0.1:0.8;
+    desiredTimes = desiredTimes(desiredTimes >= min(t) & desiredTimes <= max(t));
+    cb.Ticks = (desiredTimes - min(t)) ./ (max(t) - min(t));
+    cb.TickLabels = arrayfun(@format_phase_space_time_tick, desiredTimes, 'UniformOutput', false);
+
+    hGray   = plot3(ax, nan, nan, nan, '-', 'Color', opts.grayColor, 'LineWidth', opts.lineWidth);
+    hLocal  = plot3(ax, nan, nan, nan, '-', 'Color', localColor, 'LineWidth', opts.lineWidth);
+    hGlobal = plot3(ax, nan, nan, nan, '-', 'Color', globalColor, 'LineWidth', opts.lineWidth);
+    legend(ax, [hGray hLocal hGlobal], {'Non-significant segment','Local > Global','Global > Local'}, ...
+        'Location','southoutside', 'Orientation','horizontal');
+
+    set(ax, 'FontName','Helvetica');
+    set(findall(h,'Type','text'), 'FontName','Helvetica');
+
+    if opts.saveFigures
+        outPng = fullfile(opts.outDir, 'PhaseSpace_LocalVsGlobal_AllParticipants_AverageConditionDirectionTrajectory_3D.png');
+        print(h, outPng, '-dpng', '-r300');
+        fprintf('Local-vs-global average 3D figure saved: %s\', outPng);
+    end
+end
+
+function avgCmap = make_local_global_direction_time_colormap(nT, localGreaterMask, globalGreaterMask, grayColor, localColor, globalColor)
+    localGreaterMask = localGreaterMask(:);
+    globalGreaterMask = globalGreaterMask(:);
+
+    avgCmap = repmat(grayColor, nT, 1);
+
+    nL = min(nT, numel(localGreaterMask));
+    nG = min(nT, numel(globalGreaterMask));
+
+    avgCmap(localGreaterMask(1:nL),:) = repmat(localColor, sum(localGreaterMask(1:nL)), 1);
+    avgCmap(globalGreaterMask(1:nG),:) = repmat(globalColor, sum(globalGreaterMask(1:nG)), 1);
+end
+
+function plot_local_global_direction_trajectory(ax, XYZ, localGreaterMask, globalGreaterMask, grayColor, localColor, globalColor, lw)
+    n = size(XYZ,1);
+
+    for i = 1:(n-1)
+        if localGreaterMask(i) || localGreaterMask(i+1)
+            col = localColor;
+        elseif globalGreaterMask(i) || globalGreaterMask(i+1)
+            col = globalColor;
+        else
+            col = grayColor;
+        end
+
+        plot3(ax, XYZ(i:i+1,1), XYZ(i:i+1,2), XYZ(i:i+1,3), '-', ...
+            'Color', col, 'LineWidth', lw, 'HandleVisibility','off');
+    end
+end
+
+
+%% 3f) STATS - RQA ANOVA TEST
 
 % Requires:
 % - RQA_BROADNESS.RQA_metrics : {Nsubj x 1} cell, each a 2x8 table (1=Global, 2=Local)
@@ -2567,7 +3992,7 @@ for m = 1:numel(metricNames)
             met, pG, pC, pIx);
 end
 
-%% Joint FDR correction (BH) across all tests (Group/Condition/Interaction × metrics)
+%% 3g) Joint FDR correction (BH) across all tests (Group/Condition/Interaction × metrics)
 
 pG  = Res.p_Group;
 pC  = Res.p_Condition;
@@ -2606,9 +4031,9 @@ function q = bh_fdr(p)
     q(idx(1:m)) = adj;
 end
 
-%% 3e) Plotting RQA metrics — ONE FIGURE (2x4 grid), VIOLINS per metric (using draw_violin_mean_SD)
+%% 3h) Plotting RQA metrics — ONE FIGURE (2x4 grid), VIOLINS per metric (using draw_violin_mean_SD)
 
-plot_outdir = '/main_path/Output/RQA';
+plot_outdir = '/mainpath/Output/RQA';
 if ~exist(plot_outdir,'dir')
     mkdir(plot_outdir);
 end
@@ -2862,7 +4287,7 @@ Options.MNI_coords = MNI8;
 % Run 1 of these 5 lines in seperate
 
 % Overall
-%SPATIAL_GRADIENTS_BROADNESS = BROADNESS_SpatialGradients(BROADNESS,'principalcomps',[1:3],'evalclusters',1,'mni_coords', Options.MNI_coords,'outpath', '/main_path/Output');
+%SPATIAL_GRADIENTS_BROADNESS = BROADNESS_SpatialGradients(BROADNESS,'principalcomps',[1:3],'evalclusters',1,'mni_coords', Options.MNI_coords,'outpath', '/mainpath/Output');
 
 % Group/condition specific
 %SPATIAL_GRADIENTS_BROADNESS_young_local = BROADNESS_SpatialGradients(BROADNESS_young_local,'principalcomps',[1:3],'evalclusters',1,'mni_coords', Options.MNI_coords);
@@ -2875,7 +4300,7 @@ Options.MNI_coords = MNI8;
 load([path_home '/BROADNESS_External/MNI152_8mm_coord_dyi.mat']); %all voxels MNI coordinates
 Options.MNI_coords = MNI8;
 
-S_GRAD_Final = BROADNESS_SpatialGradients(BROADNESS,'principalcomps',[1:3],'evalclusters', 5000, 'nclusters', 2:40, 'mni_coords', Options.MNI_coords,'outpath', '/main_path/Output','scatterplots', 'all');
+S_GRAD_Final = BROADNESS_SpatialGradients(BROADNESS,'principalcomps',[1:3],'evalclusters', 5000, 'nclusters', 2:40, 'mni_coords', Options.MNI_coords,'outpath', '/mainpath/Output','scatterplots', 'all');
 
 %% 4c) Plot Sillouhete plot of optimal k frequency count for all iterations
 
@@ -2890,11 +4315,11 @@ grid on;
 
 %% 4d) Plot 3 stacked jittered data points for PC1/PC2/PC3 values across all clusters
 % Reads CSVs: OptimalK_14_Cluster_XX_PC_points.csv
-% Folder: /main_path/Output/BROADNESS_Output/ClusterPCcoords
+% Folder: /mainpath/Output/BROADNESS_Output/ClusterPCcoords
 
 clear; close all; clc;
 
-dataDir   = '/main_path/Output/BROADNESS_Output/ClusterPCcoords';
+dataDir   = '/mainpath/Output/BROADNESS_Output/ClusterPCcoords';
 optimalK  = 16; % Inserted manually after obtaining results from 4b and 4c
 
 % Limits
@@ -2939,7 +4364,7 @@ end
 %% One image per cluster: 3 stacked 1D point-rugs
 clear; close all; clc;
 
-dataDir  = '/main_path/Output/BROADNESS_Output/ClusterPCcoords';
+dataDir  = '/mainpath/Output/BROADNESS_Output/ClusterPCcoords';
 optimalK = 16; % Inserted after running 4b and 4c to identify optimal number of clusters
 
 % Match limits
@@ -3073,18 +4498,17 @@ end
 %
 % NOTES:
 % - Uses the NIfTI affine: info.Transform.T
-% - Activation is the voxel value in the NIfTI (for your current pipeline, likely 0/1)
 % - If Transform is wrong/missing, coordinates will be wrong.
 
 % ---- USER SETTINGS (edit these) ----
 optimalK = 16; % Inserted after running 4b and 4c to identify optimal number of clusters
-niiDir  = '/main_path/Output/BROADNESS_Output/BROADNESS_nifti/Clusters_k=16_Final_With_Niftis/' % where SpatialGradients_*.nii live
-outDir  = '/main_path/Output/BROADNESS_Output/BROADNESS_nifti/Clusters_k=16_Final_With_Niftis/' % where tables will be saved
+niiDir  = '/mainpath/Output/BROADNESS_Output/BROADNESS_nifti/Clusters_k=16_Final_With_Niftis/' % where SpatialGradients_*.nii live
+outDir  = '/mainpath/Output/BROADNESS_Output/BROADNESS_nifti/Clusters_k=16_Final_With_Niftis/' % where tables will be saved
 pattern = sprintf('SpatialGradients_OptimalK_%d_Cluster_*.nii*', optimalK);
 
 % ---- SAFETY CHECKS ----
 if ~(exist('niftiinfo','file')==2 && exist('niftiread','file')==2)
-    error('This block requires niftiinfo/niftiread (MATLAB built-in). Update MATLAB or use your NIfTI toolbox + affine parsing.');
+    error('This block requires niftiinfo/niftiread (MATLAB built-in). Update MATLAB or use the NIfTI toolbox + affine parsing.');
 end
 if ~exist(niiDir,'dir')
     error('NIfTI folder not found: %s', niiDir);
@@ -3148,11 +4572,6 @@ for f = 1:numel(files)
     end
 
     fprintf('Exported %s (%d voxels)\n', outCsv, height(TBL));
-
-    % ---- Optional sanity checks ----
-    % For an 8mm MNI grid ~ multiples of 2 or 8 depending on template.
-    % If these look wild, the header transform is likely not correct.
-    % disp(TBL(1:min(5,height(TBL)),:));
 end
 
 %% 4f) Converts cluster MNI coords to AAL labels: Outputs per labels cluster sheet in one Excel workbook.
@@ -3173,11 +4592,11 @@ optimalK = 16;
 
 % Folder containing the exported MNI tables from Code 1
 % (e.g., SpatialGradients_OptimalK_16_Cluster_1_MNIcoords.csv)
-clusterTableDir = '/main_path/Output/BROADNESS_Output/BROADNESS_nifti/Clusters_k=16_Final_With_Niftis/';
+clusterTableDir = '/mainpath/Output/BROADNESS_Output/BROADNESS_nifti/Clusters_k=16_Final_With_Niftis/';
 
 % Atlas in MNI space + label lookup table
-atlasNiftiPath  = '/main_path/AAL3/AAL3v1.nii';
-atlasLabelsPath = '/main_path/AAL3/AAL3v1.nii.txt';
+atlasNiftiPath  = '/mainpath/AAL3/AAL3v1.nii';
+atlasLabelsPath = '/mainpath/AAL3/AAL3v1.nii.txt';
 
 unknownLabelName = "Unknown/Background";
 
@@ -3457,7 +4876,7 @@ close all
 clc
 
 % Setup directories
-path_home = '/main_path/BROADNESS_MEG_AuditoryRecognition-main/BROADNESS_Toolbox';
+path_home = '/mainpath/BROADNESS_MEG_AuditoryRecognition-main/BROADNESS_Toolbox';
 addpath(path_home)
 BROADNESS_Startup(path_home);
 addpath(fullfile(matlabroot,'toolbox','stats','stats'),'-begin') % makes sure the pca function is the standard function in matlab
@@ -3466,12 +4885,12 @@ addpath(fullfile(matlabroot,'toolbox','stats','stats'),'-begin') % makes sure th
 %%% to reach a certain threshold of explained varience in the brain and use
 %%% this as a measure of brain network modularity/partitioning.
 
-load('/main_path/Data/Mathias_MMN/MMNSubtracted_Average_SignFixed.mat');
+load('/mainpath/MMNSubtracted_Average_SignFixed.mat');
 DATA = dum;
 
 % Remove first participant and define time vector
 
-% 100 ms baseline
+% OPTION 2: 52 ms baseline
 time = -0.100:0.004:0.8;
 DATA = DATA(:,101:326,:,2:78);
 
@@ -3481,7 +4900,7 @@ DATA_local = DATA(:,:,2,:);
 size(DATA)
 
 % Load groups and adjust subid after removing first participant
-load('/main_path/Data/Mathias_MMN/groups.mat'); % older, young
+load('/mainpath/groups.mat'); % older, young
 older = older - 1;
 young = young - 1;
 
@@ -4150,11 +5569,10 @@ end
 % Please check the BROADNESS GitHub repository for new releases.  
 % https://github.com/leonardob92/BROADNESS_MEG_AuditoryRecognition/tree/main/BROADNESS_Toolbox
 % Feel free to reach out to us if you need guidance or consultation.  
-% Leonardo Bonetti:         leonardo.bonetti@clin.au.dk
-%                           leonardo.bonetti@psych.ox.ac.uk
-% Mattia Rosso:             mattia.rosso@clin.au.dk
-% Chiara Malvaso:           chiara.malvaso@studio.unibo.it
-% Mathias Houe Andersen     mathiasha@drcmr.dk
+% Leonardo Bonetti: leonardo.bonetti@clin.au.dk
+%                   leonardo.bonetti@psych.ox.ac.uk
+% Mattia Rosso:     mattia.rosso@clin.au.dk
+% Chiara Malvaso:   chiara.malvaso@studio.unibo.it
 %
 %  Please cite the first BROADNESS paper if using the BROADNESS toolbox:
 %  Bonetti, L., Fernandez-Rubio, G., Andersen, M. H., Malvaso, C., Carlomagno,
