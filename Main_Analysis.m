@@ -2926,6 +2926,19 @@ function save_phase_space_permutation_details_xlsx(OUT, opts)
         'ClusterMass','ClusterP_corrected','SignificantClusterCorrected'});
 
     writetable(TimepointStats, outXlsx, 'Sheet', 'TimepointStats');
+
+    YoungNorm = sqrt(sum(OUT.youngMeanTrajectory.^2, 2));
+    OlderNorm = sqrt(sum(OUT.olderMeanTrajectory.^2, 2));
+    YoungMinusOlderNorm = YoungNorm - OlderNorm;
+    YoungerGreaterMask = S.significantMask(:) & (YoungNorm > OlderNorm);
+    OlderGreaterMask = S.significantMask(:) & (OlderNorm > YoungNorm);
+
+    DirectionNorms = table(Time_ms, YoungNorm, OlderNorm, YoungMinusOlderNorm, ...
+        YoungerGreaterMask, OlderGreaterMask, ...
+        'VariableNames', {'Time_ms','YoungNorm','OlderNorm','YoungMinusOlderNorm', ...
+        'YoungerGreaterMask','OlderGreaterMask'});
+    writetable(DirectionNorms, outXlsx, 'Sheet', 'DirectionNorms');
+
     writetable(OUT.clusterTable, outXlsx, 'Sheet', 'ObservedClusters');
 
     Permutation = (1:S.nPerm)';
@@ -3679,6 +3692,19 @@ function save_phase_space_local_global_permutation_details_xlsx(OUT, opts)
         'ClusterMass','ClusterP_corrected','SignificantClusterCorrected'});
 
     writetable(TimepointStats, outXlsx, 'Sheet', 'TimepointStats');
+
+    LocalNorm = sqrt(sum(OUT.localMeanTrajectory.^2, 2));
+    GlobalNorm = sqrt(sum(OUT.globalMeanTrajectory.^2, 2));
+    LocalMinusGlobalNorm = LocalNorm - GlobalNorm;
+    LocalGreaterMask = S.significantMask(:) & (LocalNorm > GlobalNorm);
+    GlobalGreaterMask = S.significantMask(:) & (GlobalNorm > LocalNorm);
+
+    DirectionNorms = table(Time_ms, LocalNorm, GlobalNorm, LocalMinusGlobalNorm, ...
+        LocalGreaterMask, GlobalGreaterMask, ...
+        'VariableNames', {'Time_ms','LocalNorm','GlobalNorm','LocalMinusGlobalNorm', ...
+        'LocalGreaterMask','GlobalGreaterMask'});
+    writetable(DirectionNorms, outXlsx, 'Sheet', 'DirectionNorms');
+
     writetable(OUT.clusterTable, outXlsx, 'Sheet', 'ObservedClusters');
 
     Permutation = (1:S.nPerm)';
